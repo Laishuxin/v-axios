@@ -26,6 +26,19 @@
       测试响应异常拦截器
     </el-button>
   </div>
+
+  <div>
+    <h1>测试重复请求</h1>
+    <el-button @click="handleTestRepeatRequest1()">
+      测试重复请求
+    </el-button>
+    <el-button @click="handleTestCancelRepeatRequest()">
+      测试自动取消重复请求
+    </el-button>
+    <el-button @click="handleTestRepeatRequest2()">
+      测试不取消重复请求
+    </el-button>
+  </div>
 </template>
 
 <script>
@@ -56,6 +69,9 @@ export default {
           })
         })
     }
+
+    // ==========================
+    // 测试拦截器
 
     const handleTestRequestInterceptor = () => {
       const vAxios = new VAxios({
@@ -118,11 +134,69 @@ export default {
       })
     }
 
+    // ===========================
+    // 测试重复请求
+    const vAxios1 = new VAxios({})
+    const handleTestRepeatRequest1 = () => {
+      vAxios1._axiosInstance
+        .request({
+          url: '/api/sleep',
+          params: {
+            timeout: 2 * 1000,
+          },
+        })
+        .then((res) => {
+          console.log('res: ', res)
+        })
+    }
+
+    const vAxios2 = new VAxios({
+      requestOptions: {
+        // 取消重复请求
+        ignoreCancel: true,
+      },
+    })
+    const handleTestCancelRepeatRequest = () => {
+      vAxios2._axiosInstance
+        .request({
+          url: '/api/sleep',
+          params: {
+            timeout: 2 * 1000,
+          },
+        })
+        .then((res) => {
+          console.log('res: ', res)
+        })
+    }
+
+    const vAxios3 = new VAxios({
+      requestOptions: {
+        // 不取消重复请求
+        ignoreCancel: false,
+      },
+    })
+    const handleTestRepeatRequest2 = () => {
+      vAxios3._axiosInstance
+        .request({
+          url: '/api/sleep',
+          params: {
+            timeout: 2 * 1000,
+          },
+        })
+        .then((res) => {
+          console.log('res: ', res)
+        })
+    }
+
     return {
       handleRequest,
       handleTestRequestInterceptor,
       handleTestResponseInterceptor,
       handleTestResponseCatchInterceptor,
+
+      handleTestRepeatRequest1,
+      handleTestRepeatRequest2,
+      handleTestCancelRepeatRequest,
     }
   },
 }
