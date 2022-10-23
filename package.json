@@ -9,7 +9,7 @@
   "scripts": {
     "dev:server": "node ./backend/src/index.js",
     "dev:client": "cd frontend && npm run dev",
-    "bootstrap": "cd backend && npm install && cd ../frontend && npm install"
+    "bootstrap": "cd backend && npm install && cd ../frontend && npm install && cd ../lib && npm install"
   },
   "keywords": [],
   "author": "",
